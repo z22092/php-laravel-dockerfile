@@ -1,0 +1,20 @@
+version: "3.7" 
+services:
+  php:
+    image: z22092/php-laravel:latest
+    build:
+      context: .
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION}
+        PHP_VERSION: ${PHP_VERSION}
+    ports: 
+      - "${HOSTPORT}:${DOCKERPORT}"
+    container_name: php-laravel
+    volumes:
+      - ./:/var/www/html/
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+    # command: php-watcher server.php --signal SIGTERM --arguments localhost --arguments 8080
+    command: php artisan serve --host 0.0.0.0 --port=${DOCKERPORT}
+    env_file:
+    - .env
